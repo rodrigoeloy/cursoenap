@@ -1,0 +1,78 @@
+---
+title: "Exercicio1"
+subtitle: Rodrigo Eloy Arantes
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Utilize a base de dados do IDH brasil 2010 (IDH_Brasil_2010.csv)
+
+```{r}
+dados <- read.csv2("https://raw.githubusercontent.com/Cayan-Portela/ENAP_regressao/master/Aula%2002/IDH_Brasil_2010.csv", header = TRUE)
+```
+
+
+Rode a regressão de acordo com o modelo abaixo: 
+
+
+```{r}
+mod1.ex <- lm(dados$mort_infantil ~ dados$renda_per_capita + 
+                dados$indice_gini + 
+                dados$salario_medio_mensal + 
+                dados$perc_criancas_extrem_pobres + 
+                dados$perc_criancas_pobres + 
+                dados$perc_pessoas_dom_agua_estogo_inadequados + 
+                dados$perc_pessoas_dom_paredes_inadequadas + 
+                dados$perc_pop_dom_com_coleta_lixo,
+              data = dados)
+  summary(mod1.ex)
+```
+
+
+###Questão 1:No modelo anterior, quais as variáveis explicativas e qual a variável dependente?
+Resposta: A variável dependente é mortalidade infantil (mort_infantil). As variáveis explicativas são: renda per capita, índice de gini, salário médio mensal, percentual de crianças extremamente pobres, percentual de crianças pobres, percentual de pessoas em domicílios com água e esgoto inadequados, percentual de pessoas em domicílios com paredes inadequadas e percentual de domicílios com coleta de lixo.
+  
+###Questão 2: Os coeficientes encontrados estão com os sinais de acordo com o esperado?
+Resposta: Sim. As variáveis que representam aspectos positivos em termos de desenvolvimento social (renda per capita, índice de gini, salário mério mensal e percentual de domicílios com coleta de lixo) possuem coeficientes negativos, ou seja, são dimensões contrárias à veriável dependente (mortalidade infantil). Já as variáveis que representam aspectos negativos (pobreza, residências sem saneamento e sem estrutura adequada) apresentam coeficientes positivos, uma vez que são aspectos diretamente relacionados à mortalidade infantil.
+
+###Questão 3: Qual o percentual da variabilidade da mortalidade infantil que é explicada pelas variáveis explicativas?
+Resposta: 67,99% da variabilidade da mortalidade infantil é explicada pelas variáveis do modelo (R2 ajustado)
+
+###Questão 4: Utilizando o comando abaixo, crie a variável ‘perc_pop_rural’, indicando o percentual do município que vive em domicílios na zona rural. Adicione essa variável ao modelo de regressão. Com base no coeficiente estimado, “controlando-se” para as variáveis já presentes no modelo, qual o efeito da localização na zona rural sobre a taxa de mortalidade infantil?
+  
+```{r}
+dados$perc_pop_rural <- dados$populacao_rural / dados$populacao_total
+```
+
+```{r}
+mod1.ex <- lm(dados$mort_infantil ~ dados$renda_per_capita + 
+                dados$indice_gini + 
+                dados$salario_medio_mensal + 
+                dados$perc_criancas_extrem_pobres + 
+                dados$perc_criancas_pobres + 
+                dados$perc_pessoas_dom_agua_estogo_inadequados + 
+                dados$perc_pessoas_dom_paredes_inadequadas + 
+                dados$perc_pop_dom_com_coleta_lixo +
+                dados$perc_pop_rural,
+              data = dados)
+  summary(mod1.ex)
+```
+
+Resposta: De acordo com a regressão, o percentual de população na zona rural tem efeito negativo sobre a mortalidade infantil. Isso indica que a urbanização tende a aumentar a taxa de mortalidade infantil.  
+  
+  
+###Questão 5: Com a inclusão da nova variável, o que aconteceu com o coeficiente de determinação e com o R2 ajustado?
+Resposta: O coeficiente de determinação e o R2 ajustado aumentaram, revelando que a variável incluída contribui para explicar a variável dependente.
+
+###Questão 6: Os dados utilizados para essa regressão são dados do tipo crosssection, do tipo séries de tempo ou do tipo dados de painel?
+Resposta: São dados do tipo cross-section, uma vez que representam observações em um instante específico no tempo (ano de 2010).
+
+
+.
+  
+  
